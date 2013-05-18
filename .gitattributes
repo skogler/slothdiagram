@@ -19,4 +19,6 @@ text=auto
 *.bmp  binary
 *.mp3  binary
 *.zip  binary
+*.bat binary
+
 

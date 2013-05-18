@@ -1,3 +1,5 @@
+local.properties
+slothdiagram/build/
 # built application files
 *.apk
 *.ap_
