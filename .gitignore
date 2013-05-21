@@ -1,8 +1,9 @@
-local.properties
-slothdiagram/build/
 # built application files
 *.apk
 *.ap_
+*.idea
+*.project
+*.settings
 
 # files for the dex VM
 *.dex
@@ -11,12 +12,14 @@ slothdiagram/build/
 *.class
 
 # generated files
-bin/
-gen/
+*/bin/
+*/build/
+*/gen/
+*/target/*
 
 # Local configuration file (sdk path, etc)
-local.properties
+*/local.properties
 
 # Eclipse project files
-.classpath
-.project
+*/.classpath
+*/.project
