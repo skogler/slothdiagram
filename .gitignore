@@ -21,5 +21,6 @@
 */local.properties
 
 # Eclipse project files
+*/*.iml
 */.classpath
 */.project

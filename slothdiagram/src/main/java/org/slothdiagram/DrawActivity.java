@@ -21,9 +21,9 @@ public class DrawActivity extends Activity {
         setContentView(R.layout.activity_draw);
         graphicsView = (GraphicsView) findViewById(R.id.graphicsView);
 
-
-        ScreenElement screenElement = new ScreenElement(new BitmapDrawable(getResources(),
-                BitmapFactory.decodeResource(getResources(), R.raw.test)));
+        ScreenElement screenElement = new ScreenElement(new BitmapDrawable(
+                getResources(), BitmapFactory.decodeResource(getResources(),
+                        R.raw.test)));
 
         renderScreenElement(screenElement);
     }
@@ -32,4 +32,3 @@ public class DrawActivity extends Activity {
         graphicsView.addScreenElement(screenElement);
     }
 }
-

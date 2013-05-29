@@ -16,24 +16,23 @@ public class GraphicsView extends View {
     private Paint paint;
     private List<ScreenElement> screenElements = new LinkedList<ScreenElement>();
 
-	public GraphicsView(Context context, AttributeSet attrs) {
-		super(context, attrs);
+    public GraphicsView(Context context, AttributeSet attrs) {
+        super(context, attrs);
         paint = new Paint();
         paint.setStrokeWidth(5);
-	}
+    }
 
-    public void addScreenElement (ScreenElement p) {
+    public void addScreenElement(ScreenElement p) {
         screenElements.add(p);
         this.invalidate();
     }
 
-	@Override
-	protected void onDraw(Canvas canvas) {
-		for (ScreenElement e : screenElements) {
+    @Override
+    protected void onDraw(Canvas canvas) {
+        for (ScreenElement e : screenElements) {
             Drawable drawable = e.getDrawable();
-            drawable.setBounds(100,100, 200, 200);
+            drawable.setBounds(100, 100, 400, 400);
             drawable.draw(canvas);
-		}
-        canvas.drawLine(0,0, 100,100, paint);
-	}
+        }
+    }
 }
