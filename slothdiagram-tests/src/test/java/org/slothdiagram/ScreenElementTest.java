@@ -2,6 +2,7 @@ package org.slothdiagram;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
@@ -11,6 +12,8 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -49,18 +52,17 @@ public class ScreenElementTest {
                 R.string.app_name);
         assertEquals("slothdiagram", appName);
     }
-    
-    
+
     @Test
     public void testSetPosition() {
         ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
         int left = 30, top = 35;
         screenElement.setPosition(left, top);
-        
+
         assertEquals(left, screenElement.getPosition().x);
-        assertEquals(top,  screenElement.getPosition().y);
+        assertEquals(top, screenElement.getPosition().y);
     }
-    
+
     @Test
     public void testDimensions() {
         ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
@@ -68,12 +70,13 @@ public class ScreenElementTest {
         screenElement.setPosition(left, top);
         int width = 20, height = 25;
         screenElement.setSize(width, height);
-        
-        assertEquals(width,  screenElement.getWidth());
+
+        assertEquals(width, screenElement.getWidth());
         assertEquals(height, screenElement.getHeight());
-        assertEquals(new Rect(left, top, left+width, top+height), screenElement.getDimensions());
+        assertEquals(new Rect(left, top, left + width, top + height),
+                screenElement.getDimensions());
     }
-    
+
     @Test
     public void testScaling() {
         ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
@@ -82,10 +85,11 @@ public class ScreenElementTest {
         int width = 20, height = 24;
         screenElement.setSize(width, height);
         float scaleFactor = 2.0f;
-        
+
         screenElement.scale(scaleFactor);
-        
-        assertEquals(new Rect(20, 23, left+width+10, top+height+12), screenElement.getDimensions());
+
+        assertEquals(new Rect(20, 23, left + width + 10, top + height + 12),
+                screenElement.getDimensions());
     }
 
     @Test
@@ -95,11 +99,99 @@ public class ScreenElementTest {
         screenElement.setPosition(left, top);
         int width = 20, height = 24;
         screenElement.setSize(width, height);
-        
+
         left = 15;
         top = 20;
         screenElement.setPosition(15, 20);
+
+        assertEquals(new Rect(left, top, left + width, top + height),
+                screenElement.getDimensions());
+    }
+
+    @Test
+    public void testConnectionPoints() {
+        ScreenElement screenElement = getDummyScreenElement();
+        // @formatter:off
+        PointF leftTopCorner     = new PointF(0.0f, 0.0f);
+        PointF rightTopCorner    = new PointF(1.0f, 0.0f);
+        PointF leftBottomCorner  = new PointF(0.0f, 1.0f);
+        PointF rightBottomCorner = new PointF(1.0f, 1.0f);
+        // @formatter:on
+        screenElement.addConnectionPoint(leftTopCorner);
+        screenElement.addConnectionPoint(rightTopCorner);
+        screenElement.addConnectionPoint(leftBottomCorner);
+        screenElement.addConnectionPoint(rightBottomCorner);
         
-        assertEquals(new Rect(left, top, left+width, top+height), screenElement.getDimensions());
+        assertTrue(screenElement.hasConnectionPoints());
+    }
+    
+    @Test
+    public void testConnectionPointsToWorldCoordinates() {
+        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        
+        int left = 30, top = 35;
+        screenElement.setPosition(left, top);
+        int width = 20, height = 24;
+        screenElement.setSize(width, height);
+        // @formatter:off
+        PointF leftTopCorner     = new PointF(0.0f, 0.0f);
+        PointF rightTopCorner    = new PointF(1.0f, 0.0f);
+        PointF leftBottomCorner  = new PointF(0.0f, 1.0f);
+        PointF rightBottomCorner = new PointF(1.0f, 1.0f);
+        // @formatter:on
+        screenElement.addConnectionPoint(leftTopCorner);
+        screenElement.addConnectionPoint(rightTopCorner);
+        screenElement.addConnectionPoint(leftBottomCorner);
+        screenElement.addConnectionPoint(rightBottomCorner);
+        
+        Point p1 = screenElement.connectionPointToWorldPoint(0);
+        Point p2 = screenElement.connectionPointToWorldPoint(1);
+        Point p3 = screenElement.connectionPointToWorldPoint(2);
+        Point p4 = screenElement.connectionPointToWorldPoint(3);
+        
+        assertEquals(new Point(left, top), p1);
+        assertEquals(new Point(left+width, top), p2);
+        assertEquals(new Point(left, top+height), p3);
+        assertEquals(new Point(left+width, top+height), p4);
+    }
+    
+    @Test
+    public void testGetNearestConnectionPoint() {
+        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        
+        int left = 30, top = 35;
+        screenElement.setPosition(left, top);
+        int width = 20, height = 24;
+        screenElement.setSize(width, height);
+        // @formatter:off
+        PointF leftTopCorner     = new PointF(0.0f, 0.0f);
+        PointF rightTopCorner    = new PointF(1.0f, 0.0f);
+        PointF leftBottomCorner  = new PointF(0.0f, 1.0f);
+        PointF rightBottomCorner = new PointF(1.0f, 1.0f);
+        // @formatter:on
+        screenElement.addConnectionPoint(leftTopCorner);
+        screenElement.addConnectionPoint(rightTopCorner);
+        screenElement.addConnectionPoint(leftBottomCorner);
+        screenElement.addConnectionPoint(rightBottomCorner);
+        
+        assertEquals(0, screenElement.getNearestConnectionPoint(new Point(32,40)));
+        assertEquals(1, screenElement.getNearestConnectionPoint(new Point(43,40)));
+        assertEquals(2, screenElement.getNearestConnectionPoint(new Point(32,55)));
+        assertEquals(3, screenElement.getNearestConnectionPoint(new Point(43,50)));
+        
+        assertEquals(0, screenElement.getNearestConnectionPoint(new Point(20,10)));
+        
+        assertEquals(0, screenElement.getNearestConnectionPoint(new Point(-1,-1)));
+    }
+    
+    public ScreenElement getDummyScreenElement() {
+        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        
+        int left = 30, top = 35;
+        screenElement.setPosition(left, top);
+        int width = 20, height = 24;
+        screenElement.setSize(width, height);
+        
+        return screenElement;
     }
 }
