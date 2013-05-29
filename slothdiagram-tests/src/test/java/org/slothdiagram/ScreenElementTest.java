@@ -2,6 +2,7 @@ package org.slothdiagram;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +12,9 @@ import org.robolectric.RobolectricTestRunner;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 @RunWith(RobolectricTestRunner.class)
 public class ScreenElementTest {
@@ -51,19 +54,29 @@ public class ScreenElementTest {
     
     @Test
     public void testSetPosition() {
-        ScreenElement screenElement = new ScreenElement(new BitmapDrawable(
-                drawActivity.getResources(), BitmapFactory.decodeResource(
-                        drawActivity.getResources(), R.raw.test)));
+        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        int left = 30, top = 35;
+        screenElement.setPosition(left, top);
         
-        screenElement.setPosition(new Point(35, 35));
+        assertEquals(screenElement.getPosition().x, left);
+        assertEquals(screenElement.getPosition().y, top);
+    }
+    
+    @Test
+    public void testDimensions() {
+        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        int left = 30, top = 35;
+        screenElement.setPosition(left, top);
+        int width = 20, height = 25;
+        screenElement.setSize(width, height);
         
-        assertEquals(screenElement.getPosition().x, 35);
-        assertEquals(screenElement.getPosition().y, 35);
-        
-        Point p = new Point(30,30);
-        screenElement.setPosition(p.x, p.y);
-        
-        assertEquals(screenElement.getPosition(), p);
+        assertEquals(screenElement.getWidth(), width);
+        assertEquals(screenElement.getHeight(), height);
+        assertEquals(screenElement.getDimensions(), new Rect(left, top, left+width, top+height));
+    }
+    
+    public void testScaling() {
+        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
     }
 
 }

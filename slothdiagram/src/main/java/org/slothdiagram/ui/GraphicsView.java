@@ -1,15 +1,16 @@
 package org.slothdiagram.ui;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.slothdiagram.ScreenElement;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
-import org.slothdiagram.ScreenElement;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class GraphicsView extends View {
 
@@ -31,7 +32,7 @@ public class GraphicsView extends View {
     protected void onDraw(Canvas canvas) {
         for (ScreenElement e : screenElements) {
             Drawable drawable = e.getDrawable();
-            drawable.setBounds(100, 100, 400, 400);
+            drawable.setBounds(e.getDimensions());
             drawable.draw(canvas);
         }
     }
