@@ -1,8 +1,6 @@
 package org.slothdiagram;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
@@ -25,15 +23,13 @@ public class ScreenElementTest {
 
     @Before
     public void setUp() throws Exception {
-        drawActivity = Robolectric.buildActivity(DrawActivity.class).create()
-                .get();
+        drawActivity = Robolectric.buildActivity(DrawActivity.class).create().get();
     }
 
     @Test
     public void testLoadFromBitmap() {
-        ScreenElement screenElement = new ScreenElement(new BitmapDrawable(
-                drawActivity.getResources(), BitmapFactory.decodeResource(
-                        drawActivity.getResources(), R.raw.test)));
+        ScreenElement screenElement = new ScreenElement(new BitmapDrawable(drawActivity.getResources(),
+                BitmapFactory.decodeResource(drawActivity.getResources(), R.raw.test)));
         assertNotNull(screenElement.getDrawable());
     }
 
@@ -48,8 +44,7 @@ public class ScreenElementTest {
 
     @Test
     public void testAppNameLoadedCorrectly() throws Exception {
-        String appName = new DrawActivity().getResources().getString(
-                R.string.app_name);
+        String appName = new DrawActivity().getResources().getString(R.string.app_name);
         assertEquals("slothdiagram", appName);
     }
 
@@ -73,8 +68,7 @@ public class ScreenElementTest {
 
         assertEquals(width, screenElement.getWidth());
         assertEquals(height, screenElement.getHeight());
-        assertEquals(new Rect(left, top, left + width, top + height),
-                screenElement.getDimensions());
+        assertEquals(new Rect(left, top, left + width, top + height), screenElement.getDimensions());
     }
 
     @Test
@@ -88,8 +82,7 @@ public class ScreenElementTest {
 
         screenElement.scale(scaleFactor);
 
-        assertEquals(new Rect(20, 23, left + width + 10, top + height + 12),
-                screenElement.getDimensions());
+        assertEquals(new Rect(20, 23, left + width + 10, top + height + 12), screenElement.getDimensions());
     }
 
     @Test
@@ -104,8 +97,7 @@ public class ScreenElementTest {
         top = 20;
         screenElement.setPosition(15, 20);
 
-        assertEquals(new Rect(left, top, left + width, top + height),
-                screenElement.getDimensions());
+        assertEquals(new Rect(left, top, left + width, top + height), screenElement.getDimensions());
     }
 
     @Test
@@ -121,14 +113,15 @@ public class ScreenElementTest {
         screenElement.addConnectionPoint(rightTopCorner);
         screenElement.addConnectionPoint(leftBottomCorner);
         screenElement.addConnectionPoint(rightBottomCorner);
-        
+
         assertTrue(screenElement.hasConnectionPoints());
+        assertFalse(screenElement.getConnectionPoints().isEmpty());
     }
-    
+
     @Test
     public void testConnectionPointsToWorldCoordinates() {
         ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
-        
+
         int left = 30, top = 35;
         screenElement.setPosition(left, top);
         int width = 20, height = 24;
@@ -143,22 +136,22 @@ public class ScreenElementTest {
         screenElement.addConnectionPoint(rightTopCorner);
         screenElement.addConnectionPoint(leftBottomCorner);
         screenElement.addConnectionPoint(rightBottomCorner);
-        
+
         Point p1 = screenElement.connectionPointToWorldPoint(0);
         Point p2 = screenElement.connectionPointToWorldPoint(1);
         Point p3 = screenElement.connectionPointToWorldPoint(2);
         Point p4 = screenElement.connectionPointToWorldPoint(3);
-        
+
         assertEquals(new Point(left, top), p1);
-        assertEquals(new Point(left+width, top), p2);
-        assertEquals(new Point(left, top+height), p3);
-        assertEquals(new Point(left+width, top+height), p4);
+        assertEquals(new Point(left + width, top), p2);
+        assertEquals(new Point(left, top + height), p3);
+        assertEquals(new Point(left + width, top + height), p4);
     }
-    
+
     @Test
     public void testGetNearestConnectionPoint() {
         ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
-        
+
         int left = 30, top = 35;
         screenElement.setPosition(left, top);
         int width = 20, height = 24;
@@ -173,25 +166,24 @@ public class ScreenElementTest {
         screenElement.addConnectionPoint(rightTopCorner);
         screenElement.addConnectionPoint(leftBottomCorner);
         screenElement.addConnectionPoint(rightBottomCorner);
-        
-        assertEquals(0, screenElement.getNearestConnectionPoint(new Point(32,40)));
-        assertEquals(1, screenElement.getNearestConnectionPoint(new Point(43,40)));
-        assertEquals(2, screenElement.getNearestConnectionPoint(new Point(32,55)));
-        assertEquals(3, screenElement.getNearestConnectionPoint(new Point(43,50)));
-        
-        assertEquals(0, screenElement.getNearestConnectionPoint(new Point(20,10)));
-        
-        assertEquals(0, screenElement.getNearestConnectionPoint(new Point(-1,-1)));
+
+        assertEquals(0, screenElement.getNearestConnectionPoint(new Point(32, 40)));
+        assertEquals(1, screenElement.getNearestConnectionPoint(new Point(43, 40)));
+        assertEquals(2, screenElement.getNearestConnectionPoint(new Point(32, 55)));
+        assertEquals(3, screenElement.getNearestConnectionPoint(new Point(43, 50)));
+
+        assertEquals(0, screenElement.getNearestConnectionPoint(new Point(20, 10)));
+        assertEquals(0, screenElement.getNearestConnectionPoint(new Point(-1, -1)));
     }
-    
+
     public ScreenElement getDummyScreenElement() {
         ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
-        
+
         int left = 30, top = 35;
         screenElement.setPosition(left, top);
         int width = 20, height = 24;
         screenElement.setSize(width, height);
-        
+
         return screenElement;
     }
 }

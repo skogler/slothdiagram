@@ -108,4 +108,8 @@ public class ScreenElement {
         }
         return nearestPointIndex;
     }
+
+    public List<PointF> getConnectionPoints() {
+        return connectionPoints;
+    }
 }
