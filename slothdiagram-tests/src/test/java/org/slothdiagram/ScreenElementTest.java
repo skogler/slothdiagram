@@ -11,7 +11,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -58,8 +57,8 @@ public class ScreenElementTest {
         int left = 30, top = 35;
         screenElement.setPosition(left, top);
         
-        assertEquals(screenElement.getPosition().x, left);
-        assertEquals(screenElement.getPosition().y, top);
+        assertEquals(left, screenElement.getPosition().x);
+        assertEquals(top,  screenElement.getPosition().y);
     }
     
     @Test
@@ -70,13 +69,37 @@ public class ScreenElementTest {
         int width = 20, height = 25;
         screenElement.setSize(width, height);
         
-        assertEquals(screenElement.getWidth(), width);
-        assertEquals(screenElement.getHeight(), height);
-        assertEquals(screenElement.getDimensions(), new Rect(left, top, left+width, top+height));
+        assertEquals(width,  screenElement.getWidth());
+        assertEquals(height, screenElement.getHeight());
+        assertEquals(new Rect(left, top, left+width, top+height), screenElement.getDimensions());
     }
     
+    @Test
     public void testScaling() {
         ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        int left = 30, top = 35;
+        screenElement.setPosition(left, top);
+        int width = 20, height = 24;
+        screenElement.setSize(width, height);
+        float scaleFactor = 2.0f;
+        
+        screenElement.scale(scaleFactor);
+        
+        assertEquals(new Rect(20, 23, left+width+10, top+height+12), screenElement.getDimensions());
     }
 
+    @Test
+    public void testRepositioning() {
+        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        int left = 30, top = 35;
+        screenElement.setPosition(left, top);
+        int width = 20, height = 24;
+        screenElement.setSize(width, height);
+        
+        left = 15;
+        top = 20;
+        screenElement.setPosition(15, 20);
+        
+        assertEquals(new Rect(left, top, left+width, top+height), screenElement.getDimensions());
+    }
 }

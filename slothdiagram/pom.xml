@@ -42,6 +42,8 @@
 			<artifactId>android</artifactId>
 			<version>${platform.version}</version>
 			<scope>provided</scope>
+			<!--scope>system</scope-->
+			<!--systemPath>${env.ANDROID_HOME}/platforms/android-${android.platform}/android.jar</systemPath-->
 		</dependency>
 
 		<dependency>

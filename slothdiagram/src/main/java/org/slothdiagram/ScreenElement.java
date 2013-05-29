@@ -33,7 +33,9 @@ public class ScreenElement {
     }
 
     public void setPosition(int left, int top) {
+        dimension.right += left - dimension.left;
         dimension.left = left;
+        dimension.bottom += top - dimension.top;
         dimension.top = top;
     }
 
@@ -52,5 +54,17 @@ public class ScreenElement {
 
     public Rect getDimensions() {
         return dimension;
+    }
+
+    public void scale(float scaleFactor) {
+        int width = (dimension.right - dimension.left);
+        int height = (dimension.bottom- dimension.top);
+        int widthOffset  = (int) (((width * scaleFactor ) - width) / 2);
+        int heightOffset = (int) (((height * scaleFactor )- height)/ 2);
+        
+        dimension.left -= widthOffset;
+        dimension.right += widthOffset;
+        dimension.top -= heightOffset;
+        dimension.bottom += heightOffset;
     }
 }
