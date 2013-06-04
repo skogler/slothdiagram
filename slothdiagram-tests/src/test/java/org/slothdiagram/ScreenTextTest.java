@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import android.app.Activity;
-import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
 @RunWith(RobolectricTestRunner.class)
@@ -19,16 +18,7 @@ public class ScreenTextTest {
         ScreenText text = new ScreenText("asdf", new Activity());
         assertNotNull(text.getDimensions());
     }
-    
-    @Test
-    public void testRender() {
-        ScreenText text = new ScreenText("asdf", new Activity());
-        Canvas canvas = new Canvas();
-        
-        text.render(canvas);
-        assertNotNull(text.getDimensions());
-    }
-    
+
     @Test
     public void testExpansionWithinScreenElement(){
         ScreenElement screenElement = getDummyScreenElement();

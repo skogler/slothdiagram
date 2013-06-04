@@ -15,6 +15,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -47,15 +48,12 @@ public class GraphicsView extends ViewGroup {
             toAdd.add(screenText.getTextView());
             this.addView(screenText.getTextView());
         }
-        // this.addTouchables(toAdd);
-
 
         this.invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
         for (ScreenElement e : screenElements) {
             Drawable drawable = e.getDrawable();
             drawable.setBounds(e.getDimensions());
@@ -65,9 +63,6 @@ public class GraphicsView extends ViewGroup {
                 Point connectionPoint = e.connectionPointToWorldPoint(i);
                 canvas.drawPoint(connectionPoint.x, connectionPoint.y, connectionPointPaint);
             }
-            // for (ScreenText st : e.getTextElements()) {
-            // st.render(canvas);
-            // }
         }
 
         for (Line l : lines) {
@@ -83,6 +78,7 @@ public class GraphicsView extends ViewGroup {
                 canvas.drawPath(path, linePaint);
             }
         }
+        super.onDraw(canvas);
     }
 
     public void addLine(Line line) {
@@ -91,6 +87,12 @@ public class GraphicsView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        for (ScreenElement screenElement : screenElements) {
+            for (ScreenText screenText : screenElement.getTextElements()) {
+                Rect dimensions = screenText.getDimensions();
+                screenText.getTextView().layout(dimensions.left, dimensions.top, dimensions.right, dimensions.bottom);
+            }
+        }
     }
 
 

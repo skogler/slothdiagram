@@ -36,7 +36,7 @@ public class DrawActivity extends Activity {
         screenElement.setSize(50, 50);
         screenElement.scale(2.0f);
         screenElement.setPosition(10, 50);
-        ScreenText stext = new ScreenText("trollolool", getApplicationContext());
+        ScreenText stext = new ScreenText("lllllll", getApplicationContext());
         screenElement.addText(stext);
         stext.setPosition(new RelativePoint(screenElement, new PointF(0.5f, 0.5f)));
         
@@ -62,5 +62,6 @@ public class DrawActivity extends Activity {
         graphicsView.addScreenElement(screenElement);
         graphicsView.addScreenElement(screenElement2);
         graphicsView.addLine(line);
+        stext.setText("asdgsdagasgdsgdasgsdgsdagdgdsagsdagadgasdgadsg");
     }
 }
