@@ -21,7 +21,14 @@ public class ScreenPointTest {
         assertEquals(35, point.getX());
         assertEquals(65, point.getY());
     }
-
+    
+    @Test
+    public void testSimpleRelativePoint() {
+        ScreenPoint point = new RelativePoint(getDummyScreenElement(), new PointF(0.25f, 0.75f));
+        assertEquals(new Point(35, 65), point.getPoint());
+        assertEquals(35, point.getX());
+        assertEquals(65, point.getY());
+    }
     
     public ScreenElement getDummyScreenElement() {
         ScreenElement screenElement = new ScreenElement(mock(Drawable.class));

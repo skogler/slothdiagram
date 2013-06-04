@@ -51,7 +51,7 @@ public class GraphicsViewTest {
 
         Canvas testCanvas = new Canvas();
         graphicsView.onDraw(testCanvas);
-        verify(screenElement.getDrawable()).setBounds(new Rect(left, top, 0, 0));
+        verify(screenElement.getDrawable()).setBounds(new Rect(left, top, left, top));
     }
     
     @Test

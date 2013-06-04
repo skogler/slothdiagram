@@ -15,7 +15,9 @@ public class ScreenElement {
 
     private Drawable drawable;
     private Rect dimension = new Rect(0, 0, 0, 0);
+    
     private List<PointF> connectionPoints = new ArrayList<PointF>();
+    private List<ScreenText> textElements = new ArrayList<ScreenText>();
 
     public ScreenElement(BitmapDrawable bitmapDrawable) {
         drawable = bitmapDrawable;
@@ -111,5 +113,19 @@ public class ScreenElement {
 
     public List<PointF> getConnectionPoints() {
         return connectionPoints;
+    }
+
+    public WorldPoint convertToWorldPoint(PointF relativePoint) {
+        int x = dimension.left + (int) ((getWidth()) * relativePoint.x);
+        int y = dimension.top + (int) ((getHeight()) * relativePoint.y);
+        return new WorldPoint(x, y);
+    }
+
+    public void addText(ScreenText screenText) {
+        this.textElements.add(screenText);
+    }
+
+    public List<ScreenText> getTextElements() {
+        return textElements;
     }
 }

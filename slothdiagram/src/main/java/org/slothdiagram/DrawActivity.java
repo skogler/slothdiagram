@@ -1,5 +1,7 @@
 package org.slothdiagram;
 
+import org.slothdiagram.ui.GraphicsView;
+
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
@@ -7,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import org.slothdiagram.ui.GraphicsView;
 
 public class DrawActivity extends Activity {
 
@@ -25,6 +26,7 @@ public class DrawActivity extends Activity {
         setUpTestScene();
     }
     
+
     public void setUpTestScene() {
         ScreenElement screenElement = new ScreenElement(new BitmapDrawable(
                 getResources(), BitmapFactory.decodeResource(getResources(),
@@ -34,6 +36,9 @@ public class DrawActivity extends Activity {
         screenElement.setSize(50, 50);
         screenElement.scale(2.0f);
         screenElement.setPosition(10, 50);
+        ScreenText stext = new ScreenText("trollolool", getApplicationContext());
+        screenElement.addText(stext);
+        stext.setPosition(new RelativePoint(screenElement, new PointF(0.5f, 0.5f)));
         
         screenElement.addConnectionPoint(new PointF(0.7f, 1.0f));
         

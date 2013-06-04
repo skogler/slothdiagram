@@ -175,8 +175,20 @@ public class ScreenElementTest {
         assertEquals(0, screenElement.getNearestConnectionPoint(new Point(20, 10)));
         assertEquals(0, screenElement.getNearestConnectionPoint(new Point(-1, -1)));
     }
+    
+    @Test
+    public void testAddTextToScreenElement() {
+        ScreenText screenText = new ScreenText("asdf", drawActivity.getApplicationContext());
+        ScreenElement dummyScreenElement = getDummyScreenElement();
+        screenText.setPosition(new RelativePoint(dummyScreenElement, new PointF(0.0f, 0.0f)));
+        
+        dummyScreenElement.addText(screenText);
+        assertFalse(dummyScreenElement.getTextElements().isEmpty());
+        assertTrue(dummyScreenElement.getTextElements().contains(screenText));
+    }
+    
 
-    public ScreenElement getDummyScreenElement() {
+    private ScreenElement getDummyScreenElement() {
         ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
 
         int left = 30, top = 35;
