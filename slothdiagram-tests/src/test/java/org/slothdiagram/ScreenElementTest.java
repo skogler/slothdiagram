@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.slothdiagram.points.RelativePoint;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -15,6 +16,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 
 @RunWith(RobolectricTestRunner.class)
 public class ScreenElementTest {
@@ -50,7 +52,7 @@ public class ScreenElementTest {
 
     @Test
     public void testSetPosition() {
-        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        DrawableElement screenElement = new ScreenElement(mock(Drawable.class));
         int left = 30, top = 35;
         screenElement.setPosition(left, top);
 
@@ -60,7 +62,7 @@ public class ScreenElementTest {
 
     @Test
     public void testDimensions() {
-        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        DrawableElement screenElement = new ScreenElement(mock(Drawable.class));
         int left = 30, top = 35;
         screenElement.setPosition(left, top);
         int width = 20, height = 25;
@@ -87,7 +89,7 @@ public class ScreenElementTest {
 
     @Test
     public void testRepositioning() {
-        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        DrawableElement screenElement = new ScreenElement(mock(Drawable.class));
         int left = 30, top = 35;
         screenElement.setPosition(left, top);
         int width = 20, height = 24;
@@ -102,7 +104,7 @@ public class ScreenElementTest {
 
     @Test
     public void testConnectionPoints() {
-        ScreenElement screenElement = getDummyScreenElement();
+        DrawableElement screenElement = getDummyScreenElement();
         // @formatter:off
         PointF leftTopCorner     = new PointF(0.0f, 0.0f);
         PointF rightTopCorner    = new PointF(1.0f, 0.0f);
@@ -150,7 +152,7 @@ public class ScreenElementTest {
 
     @Test
     public void testGetNearestConnectionPoint() {
-        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
+        DrawableElement screenElement = new ScreenElement(mock(Drawable.class));
 
         int left = 30, top = 35;
         screenElement.setPosition(left, top);
@@ -178,7 +180,7 @@ public class ScreenElementTest {
     
     @Test
     public void testAddTextToScreenElement() {
-        ScreenText screenText = new ScreenText("asdf", drawActivity.getApplicationContext());
+        ScreenText screenText = new ScreenText("asdf", new View(drawActivity));
         ScreenElement dummyScreenElement = getDummyScreenElement();
         screenText.setPosition(new RelativePoint(dummyScreenElement, new PointF(0.0f, 0.0f)));
         

@@ -69,7 +69,6 @@
 					<nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
 					<sdk>
 						<platform>17</platform>
-						<path>/home/sko/tools/android-sdk-linux</path>
 					</sdk>
 					<undeployBeforeDeploy>true</undeployBeforeDeploy>
 				</configuration>

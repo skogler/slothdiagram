@@ -6,6 +6,8 @@ import static org.mockito.Mockito.mock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.slothdiagram.points.ConnectionPoint;
+import org.slothdiagram.points.AbsolutePoint;
 
 import android.graphics.drawable.Drawable;
 
@@ -17,10 +19,10 @@ public class LineTest {
     @Test
     public void testSimpleLine() {
         Line line = new Line();
-        line.addPoint(new WorldPoint(0,0));
+        line.addPoint(new AbsolutePoint(0,0));
         line.addPoint(new ConnectionPoint(getDummyScreenElement(),0));
-        line.addPoint(new WorldPoint(10,15));
-        line.addPoint(new WorldPoint(15,10));
+        line.addPoint(new AbsolutePoint(10,15));
+        line.addPoint(new AbsolutePoint(15,10));
         assertFalse(line.getPoints().isEmpty());
     }
 

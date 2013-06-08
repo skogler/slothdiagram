@@ -1,13 +1,13 @@
-package org.slothdiagram;
+package org.slothdiagram.points;
 
 import android.graphics.Point;
 
-public class WorldPoint implements ScreenPoint {
+public class AbsolutePoint implements ScreenPoint {
 
     private int x;
     private int y;
 
-    public WorldPoint(int x, int y) {
+    public AbsolutePoint(int x, int y) {
         this.x = x;
         this.y = y;
     }

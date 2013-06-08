@@ -1,4 +1,6 @@
-package org.slothdiagram;
+package org.slothdiagram.points;
+
+import org.slothdiagram.ScreenElement;
 
 import android.graphics.Point;
 import android.graphics.PointF;

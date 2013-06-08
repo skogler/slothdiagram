@@ -34,7 +34,7 @@ public class GraphicsViewTest {
     public void testDraw() {
         ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
 
-        graphicsView.addScreenElement(screenElement);
+        graphicsView.addElement(screenElement);
 
         Canvas testCanvas = new Canvas();
         graphicsView.onDraw(testCanvas);
@@ -47,7 +47,7 @@ public class GraphicsViewTest {
         int left = 30, top = 35;
         screenElement.setPosition(left, top);
         
-        graphicsView.addScreenElement(screenElement);
+        graphicsView.addElement(screenElement);
 
         Canvas testCanvas = new Canvas();
         graphicsView.onDraw(testCanvas);
@@ -63,7 +63,7 @@ public class GraphicsViewTest {
         screenElement.setPosition(left, top);
         screenElement.setSize(width, height);
         
-        graphicsView.addScreenElement(screenElement);
+        graphicsView.addElement(screenElement);
 
         Canvas testCanvas = new Canvas();
         graphicsView.onDraw(testCanvas);

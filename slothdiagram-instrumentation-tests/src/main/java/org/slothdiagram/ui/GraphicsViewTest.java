@@ -33,7 +33,7 @@ public class GraphicsViewTest extends
                 drawActivity.getResources(), BitmapFactory.decodeResource(
                         drawActivity.getResources(), R.raw.test)));
 
-        graphicsView.addScreenElement(screenElement);
+        graphicsView.addElement(screenElement);
 
     }
 }

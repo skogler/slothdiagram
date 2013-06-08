@@ -6,6 +6,9 @@ import static org.mockito.Mockito.mock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.slothdiagram.points.ConnectionPoint;
+import org.slothdiagram.points.RelativePoint;
+import org.slothdiagram.points.ScreenPoint;
 
 import android.graphics.Point;
 import android.graphics.PointF;

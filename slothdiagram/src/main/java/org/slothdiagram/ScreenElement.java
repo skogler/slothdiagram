@@ -3,21 +3,33 @@ package org.slothdiagram;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slothdiagram.points.AbsolutePoint;
+
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 
 import com.larvalabs.svgandroid.SVG;
 
-public class ScreenElement {
+public class ScreenElement implements DrawableElement {
 
-    private Drawable drawable;
-    private Rect dimension = new Rect(0, 0, 0, 0);
-    
-    private List<PointF> connectionPoints = new ArrayList<PointF>();
-    private List<ScreenText> textElements = new ArrayList<ScreenText>();
+    private final Drawable drawable;
+    private final Rect dimension = new Rect(0, 0, 0, 0);
+
+    private final List<PointF> connectionPoints = new ArrayList<PointF>();
+    private final List<ScreenText> textElements = new ArrayList<ScreenText>();
+    private View parentView;
+    private DrawableElement parentElement;
+    private final Paint connectionPointPaint = new Paint();
+
+    {
+        connectionPointPaint.setStrokeWidth(5);
+    }
 
     public ScreenElement(BitmapDrawable bitmapDrawable) {
         drawable = bitmapDrawable;
@@ -35,10 +47,12 @@ public class ScreenElement {
         return drawable;
     }
 
+    @Override
     public Point getPosition() {
         return new Point(dimension.left, dimension.top);
     }
 
+    @Override
     public void setPosition(int left, int top) {
         dimension.right += left - dimension.left;
         dimension.left = left;
@@ -46,19 +60,43 @@ public class ScreenElement {
         dimension.top = top;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.slothdiagram.DrawableElement#setSize(int, int)
+     */
+    @Override
     public void setSize(int width, int height) {
         dimension.right = dimension.left + width;
         dimension.bottom = dimension.top + height;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.slothdiagram.DrawableElement#getWidth()
+     */
+    @Override
     public int getWidth() {
         return dimension.right - dimension.left;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.slothdiagram.DrawableElement#getHeight()
+     */
+    @Override
     public int getHeight() {
         return dimension.bottom - dimension.top;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.slothdiagram.DrawableElement#getDimensions()
+     */
+    @Override
     public Rect getDimensions() {
         return dimension;
     }
@@ -75,10 +113,12 @@ public class ScreenElement {
         dimension.bottom += heightOffset;
     }
 
+    @Override
     public void addConnectionPoint(PointF connectionPoint) {
         connectionPoints.add(connectionPoint);
     }
 
+    @Override
     public boolean hasConnectionPoints() {
         return !connectionPoints.isEmpty();
     }
@@ -90,17 +130,17 @@ public class ScreenElement {
         return new Point(x, y);
     }
 
+    @Override
     public int getNearestConnectionPoint(Point worldPoint) {
         float x = (worldPoint.x - dimension.left) / ((float) getWidth());
         float y = (worldPoint.y - dimension.top) / ((float) getHeight());
 
         double lowestSquaredDistance = Double.MAX_VALUE;
         int nearestPointIndex = 0;
-        
+
         int i = 0;
         for (PointF connectionPoint : connectionPoints) {
-            double squaredDistance = Math.pow(x - connectionPoint.x, 2)
-                    + Math.pow(y - connectionPoint.y, 2);
+            double squaredDistance = Math.pow(x - connectionPoint.x, 2) + Math.pow(y - connectionPoint.y, 2);
 
             if (squaredDistance < lowestSquaredDistance) {
                 lowestSquaredDistance = squaredDistance;
@@ -111,21 +151,75 @@ public class ScreenElement {
         return nearestPointIndex;
     }
 
+    @Override
     public List<PointF> getConnectionPoints() {
         return connectionPoints;
     }
 
-    public WorldPoint convertToWorldPoint(PointF relativePoint) {
+    public AbsolutePoint convertToWorldPoint(PointF relativePoint) {
         int x = dimension.left + (int) ((getWidth()) * relativePoint.x);
         int y = dimension.top + (int) ((getHeight()) * relativePoint.y);
-        return new WorldPoint(x, y);
+        return new AbsolutePoint(x, y);
     }
 
     public void addText(ScreenText screenText) {
-        this.textElements.add(screenText);
+        screenText.setParentElement(this);
+        textElements.add(screenText);
+        updateBounds();
+
     }
 
     public List<ScreenText> getTextElements() {
         return textElements;
+    }
+
+    @Override
+    public void setParentView(View parent) {
+        this.parentView = parent;
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        drawable.setBounds(getDimensions());
+        drawable.draw(canvas);
+
+        for (int i = 0; i < getConnectionPoints().size(); ++i) {
+            Point connectionPoint = connectionPointToWorldPoint(i);
+            canvas.drawPoint(connectionPoint.x, connectionPoint.y, connectionPointPaint);
+        }
+    }
+
+    @Override
+    public void setParentElement(DrawableElement drawableElement) {
+        this.parentElement = drawableElement;
+    }
+
+    @Override
+    public void updateBounds() {
+        if (parentView != null) {
+            parentView.invalidate();
+        }
+        int biggestRight = 0;
+        int biggestBottom = 0;
+        do {
+            biggestRight = dimension.right;
+            biggestBottom = dimension.bottom;
+            for (DrawableElement child : textElements) {
+                int currentRight = child.getDimensions().right;
+                if (biggestRight < currentRight)
+                    biggestRight = currentRight;
+
+                int currentBottom = child.getDimensions().bottom;
+                if (biggestBottom < currentBottom)
+                    biggestBottom = currentBottom;
+            }
+            dimension.right = biggestRight;
+            dimension.bottom = biggestBottom;
+        } while (biggestRight > dimension.right || biggestBottom > dimension.bottom);
+
+        if (parentView != null) {
+            parentView.invalidate();
+        }
+
     }
 }
