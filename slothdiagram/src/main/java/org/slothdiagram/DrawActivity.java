@@ -8,6 +8,7 @@ import org.slothdiagram.points.ConnectionPoint;
 import org.slothdiagram.points.RelativePoint;
 import org.slothdiagram.ui.GraphicsView;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
@@ -22,6 +23,8 @@ public class DrawActivity extends Activity {
 	private GraphicsView graphicsView;
 	private GridView sidebar;
 	private SideBarFactory sideBarFactory;
+	
+	private ActionBar actionBar;
 
 	private List<DrawableElement> elements;
 
@@ -33,6 +36,10 @@ public class DrawActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_draw);
 		
+		//Action Bar / Menu
+		actionBar = getActionBar();
+		
+		// Sidebar / Elements
 		sideBarFactory = SideBarFactory.getInstance();
 		elements = SideBarFactory.createSideBarElements();
 
