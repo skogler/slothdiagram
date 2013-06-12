@@ -1,5 +1,7 @@
 package org.slothdiagram;
 
+import java.util.List;
+
 import org.slothdiagram.points.PercentagePoint;
 import org.slothdiagram.points.PixelPoint;
 import org.slothdiagram.ui.GraphicsView;
@@ -10,10 +12,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.GridView;
 
 public class DrawActivity extends Activity {
 
     private GraphicsView graphicsView;
+    private GridView sidebar;
+    private SideBarFactory sideBarFactory;
+    private List<DrawableElement> elements;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,14 +28,35 @@ public class DrawActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_draw);
 
+        sideBarFactory = SideBarFactory.getInstance();
+        elements = SideBarFactory.createSideBarElements();
+
         graphicsView = (GraphicsView) findViewById(R.id.graphicsView);
-        // setUpTestScene();
+        sidebar = (GridView) findViewById(R.id.sidebar);
+
+        setUpTestScene();
     }
 
     public void setUpTestScene() {
         final DrawableElement root = graphicsView.getRootDrawableElement();
         PictureElement pic1 = new PictureElement(root, graphicsView, new BitmapDrawable(getResources(),
                 BitmapFactory.decodeResource(getResources(), R.raw.test)));
+
+        // Sidebar test start
+
+        elements.add(pic1);
+        elements.add(pic1);
+        elements.add(pic1);
+        elements.add(pic1);
+        elements.add(pic1);
+        elements.add(pic1);
+        elements.add(pic1);
+
+        SidebarElementAdapter adapter = new SidebarElementAdapter(this, elements);
+
+        sidebar.setAdapter(adapter);
+
+        // Sidebar test end
 
         pic1.setSize(50, 50);
         pic1.scale(2.0f);
