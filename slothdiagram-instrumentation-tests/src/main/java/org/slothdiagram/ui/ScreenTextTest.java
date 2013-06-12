@@ -1,13 +1,13 @@
 package org.slothdiagram.ui;
 
 import org.slothdiagram.DrawActivity;
+import org.slothdiagram.PictureElement;
 import org.slothdiagram.R;
-import org.slothdiagram.ScreenElement;
-import org.slothdiagram.ScreenText;
-import org.slothdiagram.points.RelativePoint;
+import org.slothdiagram.TextElement;
+import org.slothdiagram.points.PercentagePoint;
+import org.slothdiagram.points.PixelPoint;
 
 import android.graphics.BitmapFactory;
-import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
@@ -19,8 +19,8 @@ public class ScreenTextTest extends ActivityInstrumentationTestCase2<DrawActivit
     private GraphicsView graphicsView;
     private DrawActivity drawActivity;
     private Solo solo;
-    ScreenElement screenElement;
-    ScreenText textElement;
+    PictureElement screenElement;
+    TextElement textElement;
 
     public ScreenTextTest() {
         super(DrawActivity.class);
@@ -36,9 +36,9 @@ public class ScreenTextTest extends ActivityInstrumentationTestCase2<DrawActivit
             @Override
             public void run() {
                 screenElement = getDummyScreenElement();
-                textElement = new ScreenText("asdf", graphicsView);
-                textElement.setPosition(new RelativePoint(screenElement, new PointF(0.5f, 0.5f)));
-                screenElement.addText(textElement);
+                textElement = new TextElement("asdf", graphicsView, graphicsView.getRootDrawableElement());
+                textElement.setTopLeft(new PercentagePoint(screenElement, 0.5f, 0.5f));
+                screenElement.addChild(textElement);
                 graphicsView.addElement(screenElement);
             }
         });
@@ -47,20 +47,22 @@ public class ScreenTextTest extends ActivityInstrumentationTestCase2<DrawActivit
     }
 
     public void testScreenElementAutoResizeWithChild() throws InterruptedException {
-        int oldwidth = screenElement.getDimensions().width();
+        int oldX = screenElement.getRightBottom().getX();
         solo.enterText((EditText) textElement.getTextView(), "newnewasdfasdadfadsfasdfnewnewll");
 
-        
         solo.waitForView(textElement.getTextView()); // better check?
-        assertTrue(screenElement.getDimensions().width() > oldwidth);
+        assertTrue(screenElement.getRightBottom().getX() > oldX);
     }
 
-    private ScreenElement getDummyScreenElement() {
-        ScreenElement screenElement = new ScreenElement(new BitmapDrawable(drawActivity.getResources(),
-                BitmapFactory.decodeResource(drawActivity.getResources(), R.raw.test)));
+    private PictureElement getDummyScreenElement() {
+        PictureElement screenElement = new PictureElement(graphicsView.getRootDrawableElement(), graphicsView,
+                new BitmapDrawable(drawActivity.getResources(), BitmapFactory.decodeResource(
+                        drawActivity.getResources(), R.raw.test)));
 
         int left = 30, top = 35;
-        screenElement.setPosition(left, top);
+        PixelPoint tl = (PixelPoint) screenElement.getTopLeft();
+        tl.setOffsetX(left);
+        tl.setOffsetY(35);
         int width = 20, height = 24;
         screenElement.setSize(width, height);
 

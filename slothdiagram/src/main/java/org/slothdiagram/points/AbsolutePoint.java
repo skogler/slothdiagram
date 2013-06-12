@@ -4,10 +4,11 @@ import android.graphics.Point;
 
 public class AbsolutePoint implements ScreenPoint {
 
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     public AbsolutePoint(int x, int y) {
+        super();
         this.x = x;
         this.y = y;
     }
@@ -17,22 +18,14 @@ public class AbsolutePoint implements ScreenPoint {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     @Override
     public int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
     @Override
     public Point getPoint() {
-        return new Point(x, y);
+        return null;
     }
 
 }

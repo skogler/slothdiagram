@@ -1,49 +1,39 @@
 package org.slothdiagram;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.slothdiagram.points.ConnectionPoint;
-import org.slothdiagram.points.RelativePoint;
+import org.slothdiagram.points.PercentagePoint;
+import org.slothdiagram.points.PixelPoint;
 import org.slothdiagram.points.ScreenPoint;
 
 import android.graphics.Point;
-import android.graphics.PointF;
-import android.graphics.drawable.Drawable;
 
 @RunWith(RobolectricTestRunner.class)
 public class ScreenPointTest {
 
     @Test
-    public void testSimpleConnectionPoint() {
-        ScreenPoint point = new ConnectionPoint(getDummyScreenElement(), 0);
-        assertEquals(new Point(35, 65), point.getPoint());
-        assertEquals(35, point.getX());
-        assertEquals(65, point.getY());
-    }
-    
-    @Test
     public void testSimpleRelativePoint() {
-        ScreenPoint point = new RelativePoint(getDummyScreenElement(), new PointF(0.25f, 0.75f));
-        assertEquals(new Point(35, 65), point.getPoint());
-        assertEquals(35, point.getX());
-        assertEquals(65, point.getY());
+        DrawableElement de = buildPictureElement(20, 30, 80, 100);
+        ScreenPoint point = new PercentagePoint(de, 0.25f, 0.75f);
+        de.updateBoundingBox();
+
+        assertEquals(new Point(40, 105), point.getPoint());
+        assertEquals(40, point.getX());
+        assertEquals(105, point.getY());
     }
-    
-    public ScreenElement getDummyScreenElement() {
-        ScreenElement screenElement = new ScreenElement(mock(Drawable.class));
 
-        int left = 30, top = 35;
-        screenElement.setPosition(left, top);
-        int width = 20, height = 40;
-        screenElement.setSize(width, height);
-        
-        PointF p = new PointF(0.25f, 0.75f);
-        screenElement.addConnectionPoint(p);
-
+    private PictureElement buildPictureElement(int x, int y, int width, int height) {
+        PictureElement screenElement = TestUtils.getInstance().getDummyScreenElement();
+        PixelPoint tl = (PixelPoint) screenElement.getTopLeft();
+        tl.setOffsetX(x);
+        tl.setOffsetY(y);
+        PixelPoint rb = (PixelPoint) screenElement.getRightBottom();
+        rb.setOffsetX(width);
+        rb.setOffsetY(height);
         return screenElement;
     }
+
 }
