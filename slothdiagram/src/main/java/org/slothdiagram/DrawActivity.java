@@ -34,7 +34,7 @@ public class DrawActivity extends Activity {
         graphicsView = (GraphicsView) findViewById(R.id.graphicsView);
         sidebar = (GridView) findViewById(R.id.sidebar);
 
-        setUpTestScene();
+        // setUpTestScene();
     }
 
     public void setUpTestScene() {
