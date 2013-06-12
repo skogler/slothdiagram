@@ -35,6 +35,9 @@ public class PictureElement implements DrawableElement, Scalable {
 
     private final List<DrawableElement> children = new ArrayList<DrawableElement>();
 
+    private final int marginBottom;
+    private final int marginRight;
+
     public PictureElement(DrawableElement parentElement, ViewGroup parentViewGroup, Drawable drawable) {
         this.drawable = drawable;
         this.parentElement = parentElement;
@@ -42,6 +45,10 @@ public class PictureElement implements DrawableElement, Scalable {
         this.connectionPointPaint.setStrokeWidth(5);
         this.topLeft = new PixelPoint(parentElement.getTopLeft(), 0, 0);
         this.rightBottom = new PixelPoint(topLeft, 0, 0);
+
+        // TODO hardcoded
+        marginBottom = 10;
+        marginRight = 10;
     }
 
     public PictureElement(DrawableElement parentElement, ViewGroup parentViewGroup, SVG svg) {
@@ -155,7 +162,6 @@ public class PictureElement implements DrawableElement, Scalable {
 
     @Override
     public void updateBoundingBox() {
-
         if (hasChildren()) {
             assert (rightBottom instanceof PixelPoint);
             PixelPoint rightBottomPixelPoint = (PixelPoint) rightBottom;
@@ -163,18 +169,18 @@ public class PictureElement implements DrawableElement, Scalable {
             int biggestX = 0;
             int biggestY = 0;
             for (DrawableElement child : children) {
-                int childX = child.getRightBottom().getX();
+                int childX = child.getBoundingBox().right;
                 if (biggestX < childX) {
                     biggestX = childX;
                 }
-                int childY = child.getRightBottom().getY();
+                int childY = child.getBoundingBox().bottom;
                 if (biggestY < childY) {
                     biggestY = childY;
                 }
             }
 
-            rightBottomPixelPoint.setOffsetX(biggestX);
-            rightBottomPixelPoint.setOffsetY(biggestY);
+            rightBottomPixelPoint.setOffsetX(biggestX - topLeft.getX() + marginRight);
+            rightBottomPixelPoint.setOffsetY(biggestY - topLeft.getY() + marginBottom);
         }
         boundingBox.left = topLeft.getX();
         boundingBox.top = topLeft.getY();

@@ -7,7 +7,6 @@ import org.slothdiagram.points.ScreenPoint;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.View;
@@ -36,7 +35,7 @@ public class TextElement implements DrawableElement {
         this.parentElement = parentElement;
 
         topLeft = new PixelPoint(parentElement.getTopLeft(), 0, 0);
-        rightBottom = new PixelPoint(parentElement.getTopLeft(), 100, 100);
+        rightBottom = new PixelPoint(topLeft, 0, 0);
         textView = new EditText(parentView.getContext());
 
         textViewLayoutParams = new RelativeLayout.LayoutParams(MarginLayoutParams.WRAP_CONTENT,
@@ -52,10 +51,11 @@ public class TextElement implements DrawableElement {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
                     int oldRight, int oldBottom) {
-                int xChange = (right - left) - rightBottom.getOffsetX();
-                int yChange = (bottom - top) - rightBottom.getOffsetY();
+                int newRight = textView.getMeasuredWidth();
+                int newBottom = textView.getMeasuredHeight();
 
-                rightBottom.translate(xChange, yChange);
+                rightBottom.setOffsetX(newRight);
+                rightBottom.setOffsetY(newBottom);
 
                 updateBoundingBox();
 
@@ -112,9 +112,6 @@ public class TextElement implements DrawableElement {
 
     @Override
     public void draw(Canvas canvas) {
-        Paint p = new Paint();
-        p.setColor(Color.GREEN);
-        canvas.drawRect(boundingBox, p);
     }
 
     @Override
@@ -150,6 +147,7 @@ public class TextElement implements DrawableElement {
     @Override
     public void setTopLeft(ScreenPoint topLeft) {
         this.topLeft = topLeft;
+        this.rightBottom.setParentPoint(topLeft);
     }
 
     @Override

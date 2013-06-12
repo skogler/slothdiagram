@@ -34,7 +34,7 @@ public class DrawActivity extends Activity {
         graphicsView = (GraphicsView) findViewById(R.id.graphicsView);
         sidebar = (GridView) findViewById(R.id.sidebar);
 
-        // setUpTestScene();
+        setUpTestScene();
     }
 
     public void setUpTestScene() {
@@ -67,7 +67,7 @@ public class DrawActivity extends Activity {
 
         TextElement stext = new TextElement("ll", graphicsView, pic1);
         pic1.addChild(stext);
-        stext.setTopLeft(new PixelPoint(pic1.getTopLeft(), 10, 10));
+        stext.setTopLeft(new PixelPoint(pic1.getTopLeft(), 50, 10));
 
         PictureElement pic2 = new PictureElement(root, graphicsView, new BitmapDrawable(getResources(),
                 BitmapFactory.decodeResource(getResources(), R.raw.test)));
@@ -75,6 +75,10 @@ public class DrawActivity extends Activity {
         point = (PixelPoint) pic2.getTopLeft();
         point.setOffsetX(10);
         point.setOffsetY(50);
+
+        point = (PixelPoint) pic2.getRightBottom();
+        point.setOffsetX(100);
+        point.setOffsetY(100);
 
         pic2.addConnectionPoint(new PercentagePoint(pic2, 0.0f, 0.5f));
         point = (PixelPoint) pic2.getTopLeft();

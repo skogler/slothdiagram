@@ -10,7 +10,7 @@ public class PixelPoint implements ScreenPoint {
 
     private int offsetX;
     private int offsetY;
-    private final ScreenPoint parentPoint;
+    private ScreenPoint parentPoint;
 
     /**
      * Takes the parent point and offsets to it. If the parent is null, x and y
@@ -64,6 +64,10 @@ public class PixelPoint implements ScreenPoint {
     public void translate(int translateX, int translateY) {
         this.offsetX += translateX;
         this.offsetY += translateY;
+    }
+
+    public void setParentPoint(ScreenPoint parentPoint) {
+        this.parentPoint = parentPoint;
     }
 
 }
